@@ -1,0 +1,59 @@
+# ===============================
+# Laravel
+# ===============================
+
+/vendor/
+/node_modules/
+/public/build/
+/public/hot
+/storage/*.key
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+/storage/logs/*
+*.log
+
+# Cache
+/bootstrap/cache/*.php
+/bootstrap/cache/*.json
+
+# Storage (uploads privados)
+storage/app/*
+!storage/app/.gitignore
+
+# PHPUnit
+.phpunit.result.cache
+
+# IDE
+/.idea
+/.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Node
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+
+# Composer
+composer.lock
+
+# SQLite
+*.sqlite
+
+# Docker
+docker-compose.override.yml
+
+# Temporary
+*.tmp
+*.swp
