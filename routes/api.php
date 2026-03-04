@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Route;
 // 🔑 Rotas públicas de autenticação
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/recover', [AuthController::class, 'recover']);
+Route::middleware('auth:sanctum')->get('/users/me', [AuthController::class, 'me']);
 
 // 🔐 Rotas protegidas com Sanctum
 Route::middleware('auth:sanctum')->group(function () {
 
     // 👤 Rotas de utilizador
-    Route::get('/users/me', [UserController::class, 'me']);
+    //Route::get('/users/me', [UserController::class, 'me']);
     Route::post('/users', [UserController::class, 'store'])->middleware('role:COORDENADOR'); // só coordenador cria
     Route::put('/users/{id}', [UserController::class, 'update'])->middleware('role:COORDENADOR');
 
