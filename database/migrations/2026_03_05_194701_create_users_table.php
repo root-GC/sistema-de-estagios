@@ -11,25 +11,34 @@ return new class extends Migration
 
         //Criacao das tabelas user
         Schema::create('users', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('email')->unique();
-        $table->timestamp('email_verified_at')->nullable();
-        $table->string('password');
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
 
-        $table->enum('role', [
-            'ESTAGIARIO',
-            'SUPERVISOR',
-            'TUTOR',
-            'COORDENADOR',
-            'CHEFE_REPARTICAO'
-        ]);
+            $table->enum('role', [
+                'ADMIN',
+                'CHEFE',
+                'COORDENADOR',
+                'SUPERVISOR',
+                'TUTOR',
+                'ESTAGIARIO'
+            ]);
 
-        $table->boolean('ativo')->default(true);
+            $table->foreignId('curso_id')
+                ->nullable()
+                ->constrained('cursos')
+                ->nullOnDelete();
 
-        $table->rememberToken();
-        $table->timestamps();
-    });
+            $table->foreignId('instituicao_id')
+                ->nullable()
+                ->constrained('instituicoes')
+                ->nullOnDelete();
+
+            $table->boolean('ativo')->default(true);
+
+            $table->timestamps();
+        });
 
 
         // 🔹 Tabela de reset de password

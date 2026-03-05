@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('avaliacao_tutors', function (Blueprint $table) {
+       Schema::create('cursos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('estagio_id')->constrained()->onDelete('cascade');
-            $table->text('avaliacao');
-            $table->decimal('nota', 5, 2);
+            $table->string('nome');
+            $table->text('descricao')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('avaliacao_tutors');
+        Schema::dropIfExists('cursos');
     }
 };

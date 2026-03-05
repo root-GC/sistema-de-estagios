@@ -24,17 +24,25 @@ class User extends Authenticatable
         return $this->hasMany(Estagio::class, 'supervisor_id');
     }
 
+     public function curso() {
+        return $this->belongsTo(Curso::class);
+    }
 
+    public function instituicao() {
+        return $this->belongsTo(Instituicao::class);
+    }
+
+    public function estagios() {
+        return $this->hasMany(Estagio::class, 'estagiario_id');
+    }
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
+   protected $fillable = [
+        'name', 'email', 'password', 'role', 'curso_id', 'instituicao_id', 'ativo'
     ];
 
     /**

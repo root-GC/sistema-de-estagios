@@ -5,15 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Documento extends Model
+class Avaliacao extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'estagio_id', 'tipo', 'ficheiro', 'estado', 'comentario_supervisor'
-    ];
+    protected $fillable = ['estagio_id', 'tutor_id', 'nota', 'comentario'];
 
     public function estagio() {
         return $this->belongsTo(Estagio::class);
+    }
+
+    public function tutor() {
+        return $this->belongsTo(User::class, 'tutor_id');
     }
 }
