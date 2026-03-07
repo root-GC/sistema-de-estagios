@@ -30,10 +30,20 @@ class AuthController extends Controller
         ]);
     }
 
-        public function me()
-        {
-            Log::info(Auth::user());
-            return response()->json(Auth::user());
-        }
+    public function me()
+    {
+        Log::info(Auth::user());
+        return response()->json(Auth::user());
+    }
+
+    public function logout(Request $request)
+    {
+        /** @var \Laravel\Sanctum\PersonalAccessToken $token */
+        $token = $request->user()->currentAccessToken();
+        
+        $token->delete();
+
+        return response()->json(['message' => 'Logout ok']);
+    }
 
 }

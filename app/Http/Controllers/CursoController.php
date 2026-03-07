@@ -3,46 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Curso;
 class CursoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   public function store(Request $request)
+    {
+        return Curso::create($request->all());
+    }
+
     public function index()
     {
-        //
+        return Curso::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function update(Request $request, $id)
     {
-        //
+        $curso = Curso::findOrFail($id);
+
+        $curso->update($request->all());
+
+        return $curso;
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy($id)
     {
-        //
-    }
+        Curso::destroy($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(['message'=>'Curso removido']);
     }
 }

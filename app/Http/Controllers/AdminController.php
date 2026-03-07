@@ -3,9 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+//use Illuminate\Support\Facades\Log;
+use App\Models\Log;  
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+
+    //  public function logs()
+    // {
+    //     return Log::latest()->limit(100)->get();
+    // }
+     // Listar todos os logs mais recentes primeiro
+    public function logs()
+    {
+        return Log::with('user')->latest()->get();
+    }
+
+    // Criar um log (exemplo: uso interno pelo sistema)
+    public function criarLog($acao)
+    {
+        return Log::create([
+            'user_id' => Auth::id(),
+            'acao' => $acao
+        ]);
+    }
     /**
      * Display a listing of the resource.
      */

@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Instituicao extends Model
 {
     use HasFactory;
-
+  // Força o nome correto da tabela
+    protected $table = 'instituicoes';
     protected $fillable = [
         'nome', 'nuit', 'endereco', 'telefone', 'email',
         'ponto_focal_nome', 'ponto_focal_contacto'

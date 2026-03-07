@@ -26,13 +26,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // --------------------------------
     //  Dados do utilizador autenticado
     // --------------------------------
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/users/me', [UserController::class, 'me']);
 
     // ===============================
     //  ADMIN (RF-010)
     // ===============================
-    Route::middleware('role:ADMIN')->prefix('admin')->group(function () {
+    Route::middleware(['role:ADMIN'])->prefix('admin')->group(function () {
 
+   // dd("middleware funcionando");
         // Utilizadores
         Route::apiResource('users', UserController::class)->only(['store','update','destroy']);
         Route::post('users/{id}/ativar', [UserController::class, 'ativar']);
@@ -49,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // ===============================
     //  CHEFE DE REPARTIÇÃO (RF-011)
     // ===============================
-    Route::middleware('role:CHEFE')->prefix('chefe')->group(function () {
+    Route::middleware(['role:CHEFE'])->prefix('chefe')->group(function () {
         Route::get('instituicao/estagios', [EstagioController::class, 'estagiosInstituicao']);
         Route::get('instituicao/usuarios', [UserController::class, 'usuariosInstituicao']);
     });

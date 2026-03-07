@@ -16,15 +16,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
 
-            $table->enum('role', [
-                'ADMIN',
-                'CHEFE',
-                'COORDENADOR',
-                'SUPERVISOR',
-                'TUTOR',
-                'ESTAGIARIO'
-            ]);
-
             $table->foreignId('curso_id')
                 ->nullable()
                 ->constrained('cursos')

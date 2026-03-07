@@ -10,44 +10,52 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
+        $admin = User::create([
+            'name' => 'Admin Sistema',
+            'email' => 'admin@pep.com',
+            'password' => Hash::make('123456'),
+            'ativo' => true
+        ]);
+        $admin->assignRole('ADMIN');
+
+        $estagiario = User::create([
             'name' => 'Estagiário Teste',
             'email' => 'estagiario@pep.com',
             'password' => Hash::make('123456'),
-            'role' => 'ESTAGIARIO',
             'ativo' => true
         ]);
+        $estagiario->assignRole('ESTAGIARIO');
 
-        User::create([
+        $supervisor = User::create([
             'name' => 'Supervisor Teste',
             'email' => 'supervisor@pep.com',
             'password' => Hash::make('123456'),
-            'role' => 'SUPERVISOR',
             'ativo' => true
         ]);
+        $supervisor->assignRole('SUPERVISOR');
 
-        User::create([
+        $tutor = User::create([
             'name' => 'Tutor Teste',
             'email' => 'tutor@pep.com',
             'password' => Hash::make('123456'),
-            'role' => 'TUTOR',
             'ativo' => true
         ]);
+        $tutor->assignRole('TUTOR');
 
-        User::create([
+        $coordenador = User::create([
             'name' => 'Coordenador Teste',
             'email' => 'coordenador@pep.com',
             'password' => Hash::make('123456'),
-            'role' => 'COORDENADOR',
             'ativo' => true
         ]);
+        $coordenador->assignRole('COORDENADOR');
 
-        User::create([
+        $chefe = User::create([
             'name' => 'Chefe Teste',
             'email' => 'chefe@pep.com',
             'password' => Hash::make('123456'),
-            'role' => 'CHEFE_REPARTICAO',
             'ativo' => true
         ]);
+        $chefe->assignRole('CHEFE_REPARTICAO');
     }
 }

@@ -3,6 +3,9 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -38,9 +41,24 @@ class Kernel extends HttpKernel
     /**
      * Route Middleware (AQUI é onde registamos o role)
      */
-    protected $routeMiddleware = [
+//    protected $middlewareAliases = [
+//         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+//     'role' => RoleMiddleware::class,
+//     'permission' => PermissionMiddleware::class,
+//     'role_or_permission' => RoleOrPermissionMiddleware::class,
+//     ];
 
-        // 🔐 Middleware personalizado
-        'role' => \App\Http\Middleware\RoleMiddleware::class,
-    ];
+     protected $routeMiddleware = [
+     'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+     'role' => RoleMiddleware::class,
+    'permission' => PermissionMiddleware::class,
+    'role_or_permission' => RoleOrPermissionMiddleware::class,
+ ];
+// protected $routeMiddleware = [
+//     // ... other middleware
+//     'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+//     'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+//     'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+// ];
+
 }
