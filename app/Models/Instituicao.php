@@ -22,4 +22,8 @@ class Instituicao extends Model
     public function estagios() {
         return $this->hasMany(Estagio::class);
     }
+    public function cursos()
+    {
+        return $this->belongsToMany(Curso::class);
+    }
 }

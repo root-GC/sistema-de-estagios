@@ -7,23 +7,55 @@ use App\Models\Instituicao;
 
 class InstituicaoController extends Controller
 {
-   public function store(Request $request)
+    public function store(Request $request)
     {
-        return Instituicao::create($request->all());
+        $data = $request->validate([
+            'nome' => 'required|string',
+            'nuit' => 'nullable|string',
+            'endereco' => 'nullable|string',
+            'telefone' => 'nullable|string',
+            'email' => 'nullable|email',
+            'ponto_focal_nome' => 'required|string',
+            'ponto_focal_contacto' => 'required|string',
+            'cursos' => 'array'
+        ]);
+
+        $instituicao = Instituicao::create($data);
+
+        if(isset($data['cursos'])){
+            $instituicao->cursos()->sync($data['cursos']);
+        }
+
+        return response()->json($instituicao->load('cursos'),201);
     }
 
     public function index()
     {
-        return Instituicao::all();
+        return Instituicao::with('cursos')->latest()->get();
     }
 
-    public function update(Request $request, $id)
+   public function update(Request $request, $id)
     {
-        $inst = Instituicao::findOrFail($id);
+        $instituicao = Instituicao::findOrFail($id);
 
-        $inst->update($request->all());
+        $data = $request->validate([
+            'nome' => 'sometimes|string',
+            'nuit' => 'nullable|string',
+            'endereco' => 'nullable|string',
+            'telefone' => 'nullable|string',
+            'email' => 'nullable|email',
+            'ponto_focal_nome' => 'nullable|string',
+            'ponto_focal_contacto' => 'nullable|string',
+            'cursos' => 'array'
+        ]);
 
-        return $inst;
+        $instituicao->update($data);
+
+        if(isset($data['cursos'])){
+            $instituicao->cursos()->sync($data['cursos']);
+        }
+
+        return response()->json($instituicao->load('cursos'));
     }
 
     public function destroy($id)

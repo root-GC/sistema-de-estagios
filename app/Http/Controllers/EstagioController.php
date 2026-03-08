@@ -8,6 +8,30 @@ use Illuminate\Support\Facades\Auth; // ✅ Importa o Auth
 
 class EstagioController extends Controller
 {
+
+    // public function estagiosInstituicao()
+    // {
+    //     $instituicaoId = Auth::user()->instituicao_id;
+
+    //     return Estagio::where('instituicao_id', $instituicaoId)
+    //         ->with(['estagiario','supervisor','tutor'])
+    //         ->get();
+    // }
+
+
+    public function estagiosInstituicao($id)
+    {
+        return Estagio::where('instituicao_id', $id)
+            ->with(['estagiario','supervisor','tutor'])
+            ->get();
+    }
+
+    public function todosEstagios()
+    {
+        // Trás todos os estágios com os relacionamentos
+        return Estagio::with(['estagiario','supervisor','tutor', 'instituicao'])->get();
+    }
+
     // 🔥 Atribuir supervisor com regra dos 5 alunos
     public function atribuirSupervisor(Request $request)
     {

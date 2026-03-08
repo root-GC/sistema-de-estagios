@@ -16,7 +16,9 @@ class UserController extends Controller
         return $request->user();
     }
 
-  public function store(Request $request) {
+
+    public function store(Request $request) {
+
         $data = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
@@ -24,26 +26,57 @@ class UserController extends Controller
             'role' => 'required|in:ADMIN,COORDENADOR,SUPERVISOR,TUTOR,ESTAGIARIO,CHEFE_REPARTICAO',
         ]);
 
+        $userAuth = Auth::user();
+
+        // definir roles permitidas
+        if ($userAuth->hasRole('ADMIN')) {
+
+            $rolesPermitidas = ['ADMIN','CHEFE_REPARTICAO'];
+
+        } elseif ($userAuth->hasRole('CHEFE_REPARTICAO')) {
+
+            $rolesPermitidas = ['COORDENADOR'];
+
+        } else if($userAuth->hasRole('COORDENADOR')){
+
+            $rolesPermitidas = ['SUPERVISOR','TUTOR','ESTAGIARIO'];
+        }
+        else {
+
+            return response()->json([
+                'message' => 'Sem permissão para criar utilizadores'
+            ], 403);
+        }
+
+        // verificar se a role solicitada é permitida
+        if (!in_array($data['role'], $rolesPermitidas)) {
+
+            return response()->json([
+                'message' => 'Não tem permissão para criar utilizador com essa role'
+            ], 403);
+        }
+
         // Hash da password
         $data['password'] = Hash::make($data['password']);
 
-        // Cria o user (sem campo role no banco!)
+        // Criar utilizador
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
-            'ativo' => true, // podes adicionar se quiser default
+            'ativo' => true,
         ]);
 
-        // Atribui a role com Spatie
+        // atribuir role
         $user->assignRole($data['role']);
 
-    // registrar log
-    $createdBy = Auth::check() ? Auth::user()->name : 'Sistema';
-    (new AdminController)->criarLog("Usuário {$user->name} criado por " . $createdBy);
+        // registrar log
+        $createdBy = Auth::check() ? Auth::user()->name : 'Sistema';
+        (new AdminController)->criarLog("Usuário {$user->name} criado por " . $createdBy);
 
-        return response()->json($user->load('roles'), 201); // opcional: carrega roles para retorno
-  }
+        return response()->json($user->load('roles'), 201);
+    }
+
 
     public function update(Request $request, $id) {
         $user = User::findOrFail($id);
@@ -69,6 +102,15 @@ class UserController extends Controller
         $user->ativo = false;
         $user->save();
         return response()->json($user);
+    }
+
+    public function usuariosInstituicao()
+    {
+        $instituicaoId = Auth::user()->instituicao_id;
+
+        return User::where('instituicao_id', $instituicaoId)
+            ->with('roles')
+            ->get();
     }
 
 }

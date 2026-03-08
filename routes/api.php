@@ -34,27 +34,70 @@ Route::middleware('auth:sanctum')->group(function () {
     // ===============================
     Route::middleware(['role:ADMIN'])->prefix('admin')->group(function () {
 
-   // dd("middleware funcionando");
-        // Utilizadores
-        Route::apiResource('users', UserController::class)->only(['store','update','destroy']);
+        // criar CHEFE DE REPARTIÇÃO
+        Route::apiResource('users', UserController::class)
+            ->only(['store','update','destroy']);
+
         Route::post('users/{id}/ativar', [UserController::class, 'ativar']);
         Route::post('users/{id}/desativar', [UserController::class, 'desativar']);
 
-        // Cursos e Instituições
+        // cursos
         Route::post('cursos', [CursoController::class, 'store']);
-        Route::post('instituicoes', [InstituicaoController::class, 'store']);
 
-        // Logs / auditoria
+        // auditoria
         Route::get('logs', [AdminController::class, 'logs']);
     });
 
     // ===============================
     //  CHEFE DE REPARTIÇÃO (RF-011)
     // ===============================
-    Route::middleware(['role:CHEFE'])->prefix('chefe')->group(function () {
-        Route::get('instituicao/estagios', [EstagioController::class, 'estagiosInstituicao']);
-        Route::get('instituicao/usuarios', [UserController::class, 'usuariosInstituicao']);
+    Route::middleware(['role:CHEFE_REPARTICAO'])->prefix('chefe')->group(function () {
+
+        // ======================
+        // utilizadores
+        // ======================
+
+        // criar coordenador / estagiario / supervisor / tutor
+        Route::post('users', [UserController::class, 'store']);
+
+        // actualizar utilizador
+        Route::put('users/{id}', [UserController::class, 'update']);
+
+        // remover utilizador
+        Route::delete('users/{id}', [UserController::class, 'destroy']);
+
+        // ver utilizadores da instituição
+        //Route::get('instituicao/usuarios', [UserController::class, 'usuariosInstituicao']);
+
+
+        // ======================
+        // instituições
+        // ======================
+
+        // criar instituição parceira
+        Route::post('instituicoes', [InstituicaoController::class, 'store']);
+
+        // listar instituições
+        Route::get('instituicoes', [InstituicaoController::class, 'index']);
+
+        // atualizar instituição
+        Route::put('instituicoes/{id}', [InstituicaoController::class, 'update']);
+
+        // remover instituição
+        Route::delete('instituicoes/{id}', [InstituicaoController::class, 'destroy']);
+
+
+        // ======================
+        // estágios
+        // ======================
+
+        // visualizar estágios de uma instituição especifica
+        Route::get('instituicoes/{id}/estagios', [EstagioController::class, 'estagiosInstituicao']);
+        // visualizar estágios das instituições
+        Route::get('chefe/estagios', [EstagioController::class, 'todosEstagios']);
     });
+
+
 
     // ===============================
     //  COORDENADOR (RF-020)
