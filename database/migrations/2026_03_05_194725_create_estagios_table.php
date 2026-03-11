@@ -24,8 +24,9 @@ return new class extends Migration
           ->restrictOnDelete();
 
     $table->foreignId('tutor_id')
-          ->constrained('users')
-          ->restrictOnDelete();
+      ->nullable()
+      ->constrained('users')
+      ->restrictOnDelete();
 
     $table->foreignId('instituicao_id')
           ->constrained('instituicoes')
@@ -44,6 +45,8 @@ return new class extends Migration
     $table->decimal('nota_final', 5, 2)->nullable();
 
     $table->timestamps();
+   
+    
 });
     }
 

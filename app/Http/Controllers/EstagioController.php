@@ -9,15 +9,79 @@ use Illuminate\Support\Facades\Auth; // ✅ Importa o Auth
 class EstagioController extends Controller
 {
 
-    // public function estagiosInstituicao()
-    // {
-    //     $instituicaoId = Auth::user()->instituicao_id;
+    //
+    //Listar todos os estágios
+    //
+    public function index()
+    {
+        return Estagio::with([
+            'estagiario',
+            'supervisor',
+            'tutor',
+            'instituicao',
+            'curso'
+        ])->get();
+    }
 
-    //     return Estagio::where('instituicao_id', $instituicaoId)
-    //         ->with(['estagiario','supervisor','tutor'])
-    //         ->get();
-    // }
+    //
+    //Criacao de um estagio
+    //
+    public function store(Request $request)
+    {
+        $request->validate([
+            'estagiario_id' => 'required|exists:users,id',
+            'supervisor_id' => 'required|exists:users,id',
+            'instituicao_id' => 'required|exists:instituicoes,id',
+            'curso_id' => 'required|exists:cursos,id'
+        ]);
 
+        // regra: supervisor <= 5 estagiários
+        $count = Estagio::where('supervisor_id', $request->supervisor_id)->count();
+
+        if ($count >= 5) {
+            return response()->json([
+                'erro' => 'Supervisor já atingiu o limite de 5 estagiários'
+            ], 400);
+        }
+
+        $estagio = Estagio::create([
+            'estagiario_id' => $request->estagiario_id,
+            'supervisor_id' => $request->supervisor_id,
+            'instituicao_id' => $request->instituicao_id,
+            'curso_id' => $request->curso_id
+        ]);
+
+        return response()->json($estagio);
+    }
+
+    //
+    //Atribuicao de tutor depois da criacao de um estágio
+    //
+    public function atribuirTutor(Request $request, $id)
+    {
+        $request->validate([
+            'tutor_id' => 'required|exists:users,id'
+        ]);
+
+        // regra: tutor <= 3 estagiários
+        $count = Estagio::where('tutor_id', $request->tutor_id)->count();
+
+        if ($count >= 3) {
+            return response()->json([
+                'erro' => 'Tutor já tem 3 estagiários'
+            ], 400);
+        }
+
+        $estagio = Estagio::findOrFail($id);
+
+        $estagio->update([
+            'tutor_id' => $request->tutor_id
+        ]);
+
+        return response()->json([
+            'message' => 'Tutor atribuído com sucesso'
+        ]);
+    }
 
     public function estagiosInstituicao($id)
     {
@@ -32,26 +96,7 @@ class EstagioController extends Controller
         return Estagio::with(['estagiario','supervisor','tutor', 'instituicao'])->get();
     }
 
-    // 🔥 Atribuir supervisor com regra dos 5 alunos
-    public function atribuirSupervisor(Request $request)
-    {
-        $supervisorId = $request->supervisor_id;
-        $estagioId = $request->estagio_id;
-
-        $count = Estagio::where('supervisor_id', $supervisorId)->count();
-
-        if ($count >= 5) {
-            return response()->json([
-                'erro' => 'Supervisor já tem 5 estagiários'
-            ], 400);
-        }
-
-        $estagio = Estagio::findOrFail($estagioId);
-        $estagio->supervisor_id = $supervisorId;
-        $estagio->save();
-
-        return response()->json(['message' => 'Supervisor atribuído com sucesso']);
-    }
+   
 
     // 🔐 Supervisor só vê os seus estágios
     public function meusEstagios()
@@ -60,4 +105,10 @@ class EstagioController extends Controller
 
         return response()->json($estagios);
     }
+//     public function meusEstagios()
+// {
+//     return Estagio::where('supervisor_id', Auth::id())
+//         ->with(['estagiario','instituicao','curso'])
+//         ->get();
+// }
 }

@@ -110,7 +110,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Estágios
         Route::get('estagios', [EstagioController::class, 'index']);
-        Route::post('estagios/distribuir', [EstagioController::class, 'distribuir']);
+        Route::post('estagios', [EstagioController::class, 'store']); // criar estágio
+        Route::post('estagios/{id}/tutor', [EstagioController::class, 'atribuirTutor']);
         Route::get('estagios/exportar-notas', [EstagioController::class, 'exportarNotas']);
     });
 
