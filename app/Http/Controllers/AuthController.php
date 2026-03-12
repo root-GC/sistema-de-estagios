@@ -24,8 +24,12 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+         // pega o nome do primeiro role do Spatie
+        $role = $user->getRoleNames()->first(); // retorna string ou null
+
         return response()->json([
             'user' => $user,
+            'role' => $user->$role,
             'token' => $token
         ]);
     }
