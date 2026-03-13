@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // criar CHEFE DE REPARTIÇÃO
         Route::apiResource('users', UserController::class)
-            ->only(['store','update','destroy']);
+            ->only(['index','store','update','destroy']);
 
         Route::post('users/{id}/ativar', [UserController::class, 'ativar']);
         Route::post('users/{id}/desativar', [UserController::class, 'desativar']);

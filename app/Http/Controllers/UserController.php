@@ -12,10 +12,30 @@ use App\Http\Controllers\AdminController;
 class UserController extends Controller
 {
 
-     public function me(Request $request) {
+    public function me(Request $request) {
         return $request->user();
     }
 
+    public function index(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->hasRole('ADMIN')) {
+            $users = User::role('CHEFE_REPARTICAO')->get();
+        } 
+        elseif ($user->hasRole('COORDENADOR')) {
+            $users = User::role([
+                'ESTAGIARIO',
+                'SUPERVISOR',
+                'TUTOR'
+            ])->get();
+        } 
+        else {
+            $users = collect();
+        }
+
+        return response()->json($users);
+    }
 
     public function store(Request $request) {
 
