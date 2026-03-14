@@ -11,11 +11,17 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 // ===============================
-// ROTAS PÚBLICAS (Sem autenticação)
+// ROTAS PÚBLICAS
 // ===============================
 Route::prefix('auth')->group(function () {
+
     Route::post('/login', [AuthController::class, 'login']);
+
+    // enviar email de recuperação
     Route::post('/recover', [AuthController::class, 'recover']);
+
+    // redefinir senha
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 });
 
 // ===============================
