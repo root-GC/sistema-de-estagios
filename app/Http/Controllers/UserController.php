@@ -55,11 +55,11 @@ class UserController extends Controller
 
         } elseif ($userAuth->hasRole('CHEFE_REPARTICAO')) {
 
-            $rolesPermitidas = ['COORDENADOR'];
+            $rolesPermitidas = ['COORDENADOR','TUTOR'];
 
         } else if($userAuth->hasRole('COORDENADOR')){
 
-            $rolesPermitidas = ['SUPERVISOR','TUTOR','ESTAGIARIO'];
+            $rolesPermitidas = ['SUPERVISOR','ESTAGIARIO'];
         }
         else {
 

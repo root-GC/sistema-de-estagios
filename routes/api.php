@@ -48,10 +48,23 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('users/{id}/desativar', [UserController::class, 'desativar']);
 
         // cursos
-        Route::post('cursos', [CursoController::class, 'store']);
+        Route::get('cursos', [CursoController::class, 'index']);
+        Route::get('cursos/{id}', [CursoController::class, 'show']);
+        Route::put('cursos/{id}', [CursoController::class, 'update']);
+        Route::delete('cursos/{id}', [CursoController::class, 'destroy']);
+
+        // ativar/desativar
+        Route::post('cursos/{id}/ativar', [CursoController::class, 'ativar']);
+        Route::post('cursos/{id}/desativar', [CursoController::class, 'desativar']);
 
         // auditoria
         Route::get('logs', [AdminController::class, 'logs']);
+
+        // Parametrização
+        //listar sessões ativas
+        //ver últimos acessos
+        //detectar abusos
+        Route::get('users/ativos', [AdminController::class, 'usersAtivos']);
     });
 
     // ===============================
@@ -63,8 +76,11 @@ Route::middleware('auth:sanctum')->group(function () {
         // utilizadores
         // ======================
 
-        // criar coordenador / estagiario / supervisor / tutor
+        // criar coordenador / tutor
         Route::post('users', [UserController::class, 'store']);
+
+        // buscarcoordenador  / tutor
+        Route::get('users', [UserController::class, 'index']);
 
         // actualizar utilizador
         Route::put('users/{id}', [UserController::class, 'update']);
@@ -110,17 +126,32 @@ Route::middleware('auth:sanctum')->group(function () {
     // ===============================
     Route::middleware('role:COORDENADOR')->prefix('coordenador')->group(function () {
 
-        // Utilizadores
+        // ================= USERS =================
         Route::post('users', [UserController::class, 'store']);
         Route::put('users/{id}', [UserController::class, 'update']);
+        Route::get('tutores', [UserController::class, 'tutores']);
 
-        // Estágios
+        // ================= ESTÁGIOS =================
         Route::get('estagios', [EstagioController::class, 'index']);
-        Route::post('estagios', [EstagioController::class, 'store']); // criar estágio
+        Route::get('estagios/{id}', [EstagioController::class, 'show']);
+        Route::post('estagios', [EstagioController::class, 'store']);
+
+        // distribuição
         Route::post('estagios/{id}/tutor', [EstagioController::class, 'atribuirTutor']);
-        Route::get('estagios/exportar-notas', [EstagioController::class, 'exportarNotas']);
+        Route::get('tutores/{id}/estagios', [EstagioController::class, 'porTutor']);
+
+        // ================= CARTAS =================
+        Route::post('estagios/{id}/carta', [EstagioController::class, 'gerarCarta']);
+        Route::get('estagios/{id}/carta', [EstagioController::class, 'baixarCarta']);
+
+        // ================= PAUTA =================
+        Route::get('estagios/pauta', [EstagioController::class, 'gerarPauta']);
+
+        // ================= SIGEUP =================
+        Route::get('estagios/exportar-sigeup', [EstagioController::class, 'exportarSIGEUP']);
     });
 
+    
     // ===============================
     //  ESTAGIÁRIO (RF-017)
     // ===============================
