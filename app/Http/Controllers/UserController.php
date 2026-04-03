@@ -133,4 +133,11 @@ class UserController extends Controller
             ->get();
     }
 
+    public function tutores(){
+        $tutores = User::where('roles', 'TUTOR')->get();
+        return response()->json($tutores);
+    } 
+
+   
+
 }

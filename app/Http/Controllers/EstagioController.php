@@ -96,6 +96,16 @@ class EstagioController extends Controller
         return Estagio::with(['estagiario','supervisor','tutor', 'instituicao'])->get();
     }
 
+    public function show($id){
+        $estagio = Estagio::findOrFail($id);
+        return response()->json($estagio);
+    }
+
+    public function porTutor($id){
+        $estagio = Estagio::where('id_tutor', $id);
+        return response()->json($estagio);
+    }
+
    
 
     // 🔐 Supervisor só vê os seus estágios

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\Log;
 use App\Models\Log;  
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -66,5 +67,10 @@ class AdminController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+     public function usersAtivos(){
+        $user = User::where('ativo', true)->get();
+        return response()->json($user);
     }
 }

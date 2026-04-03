@@ -140,6 +140,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('estagios/{id}/tutor', [EstagioController::class, 'atribuirTutor']);
         Route::get('tutores/{id}/estagios', [EstagioController::class, 'porTutor']);
 
+        //not done
+
         // ================= CARTAS =================
         Route::post('estagios/{id}/carta', [EstagioController::class, 'gerarCarta']);
         Route::get('estagios/{id}/carta', [EstagioController::class, 'baixarCarta']);
@@ -149,6 +151,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // ================= SIGEUP =================
         Route::get('estagios/exportar-sigeup', [EstagioController::class, 'exportarSIGEUP']);
+
+        //not done
     });
 
     
