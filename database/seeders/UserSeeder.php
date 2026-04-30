@@ -2,60 +2,43 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = User::create([
-            'name' => 'Admin Sistema',
-            'email' => 'admin@pep.com',
-            'password' => Hash::make('123456'),
-            'ativo' => true
-        ]);
-        $admin->assignRole('ADMIN');
+        // Criar admin
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@pep.com'],
+            [
+                'name' => 'Admin Sistema',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $admin->assignRole('admin');
 
-        $estagiario = User::create([
-            'name' => 'Estagiário Teste',
-            'email' => 'estagiario@pep.com',
-            'password' => Hash::make('123456'),
-            'ativo' => true
-        ]);
-        $estagiario->assignRole('ESTAGIARIO');
+        // Criar usuários teste de cada role
+        $testUsers = [
+            ['name' => 'Estagiário Teste', 'email' => 'estagiario@pep.com', 'role' => 'estudante'],
+            ['name' => 'Supervisor Teste', 'email' => 'supervisor@pep.com', 'role' => 'supervisor'],
+            ['name' => 'Tutor Teste', 'email' => 'tutor@pep.com', 'role' => 'tutor'],
+            ['name' => 'Coordenador Teste', 'email' => 'coordenador@pep.com', 'role' => 'coordenador'],
+            ['name' => 'Chefe Teste', 'email' => 'chefe@pep.com', 'role' => 'chefe_repartição'],
+        ];
 
-        $supervisor = User::create([
-            'name' => 'Supervisor Teste',
-            'email' => 'supervisor@pep.com',
-            'password' => Hash::make('123456'),
-            'ativo' => true
-        ]);
-        $supervisor->assignRole('SUPERVISOR');
-
-        $tutor = User::create([
-            'name' => 'Tutor Teste',
-            'email' => 'tutor@pep.com',
-            'password' => Hash::make('123456'),
-            'ativo' => true
-        ]);
-        $tutor->assignRole('TUTOR');
-
-        $coordenador = User::create([
-            'name' => 'Coordenador Teste',
-            'email' => 'coordenador@pep.com',
-            'password' => Hash::make('123456'),
-            'ativo' => true
-        ]);
-        $coordenador->assignRole('COORDENADOR');
-
-        $chefe = User::create([
-            'name' => 'Chefe Teste',
-            'email' => 'chefe@pep.com',
-            'password' => Hash::make('123456'),
-            'ativo' => true
-        ]);
-        $chefe->assignRole('CHEFE_REPARTICAO');
+        foreach ($testUsers as $userData) {
+            $user = User::firstOrCreate(
+                ['email' => $userData['email']],
+                [
+                    'name' => $userData['name'],
+                    'password' => bcrypt('password'),
+                    'email_verified_at' => now(),
+                ]
+            );
+            $user->assignRole($userData['role']);
+        }
     }
 }

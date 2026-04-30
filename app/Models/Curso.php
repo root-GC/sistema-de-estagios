@@ -9,13 +9,25 @@ class Curso extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nome', 'descricao'];
+    protected $fillable = [
+        'departamento_id',
+        'nome',
+        'descricao',
+        'duracao_anos'
+    ];
 
-    public function users() {
-        return $this->hasMany(User::class);
+    public function departamento()
+    {
+        return $this->belongsTo(Departamento::class);
     }
 
-    public function estagios() {
+    public function estudantes()
+    {
+        return $this->hasMany(StudentProfile::class);
+    }
+
+    public function estagios()
+    {
         return $this->hasMany(Estagio::class);
     }
 }

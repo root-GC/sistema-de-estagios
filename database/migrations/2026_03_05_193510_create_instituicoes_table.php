@@ -14,14 +14,14 @@ return new class extends Migration
        Schema::create('instituicoes', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('nuit')->nullable();
+            $table->string('nuit')->unique();
             $table->string('endereco')->nullable();
             $table->string('telefone')->nullable();
             $table->string('email')->nullable();
-
             $table->string('ponto_focal_nome');
             $table->string('ponto_focal_contacto');
-
+            $table->enum('status', ['ativa', 'suspensa', 'inativa'])->default('ativa');
+            $table->timestamp('validade_parceria')->nullable();
             $table->timestamps();
         });
     }

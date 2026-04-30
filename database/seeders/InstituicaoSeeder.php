@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Instituicao;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class InstituicaoSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('instituicoes')->insert([
+        $instituicoes = [
             [
                 'nome' => 'Banco de Moçambique',
                 'nuit' => '400123456',
@@ -18,8 +18,8 @@ class InstituicaoSeeder extends Seeder
                 'email' => 'contacto@bm.co.mz',
                 'ponto_focal_nome' => 'Carlos Matola',
                 'ponto_focal_contacto' => '842111111',
-                'created_at' => now(),
-                'updated_at' => now()
+                'status' => 'ativa',
+                'validade_parceria' => now()->addYear(),
             ],
             [
                 'nome' => 'Vodacom Moçambique',
@@ -29,8 +29,8 @@ class InstituicaoSeeder extends Seeder
                 'email' => 'info@vodacom.co.mz',
                 'ponto_focal_nome' => 'Ana Chissano',
                 'ponto_focal_contacto' => '843222222',
-                'created_at' => now(),
-                'updated_at' => now()
+                'status' => 'ativa',
+                'validade_parceria' => now()->addYears(2),
             ],
             [
                 'nome' => 'INCM',
@@ -40,9 +40,35 @@ class InstituicaoSeeder extends Seeder
                 'email' => 'geral@incm.gov.mz',
                 'ponto_focal_nome' => 'João Mabunda',
                 'ponto_focal_contacto' => '844333333',
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
-        ]);
+                'status' => 'ativa',
+                'validade_parceria' => now()->addMonths(6),
+            ],
+            [
+                'nome' => 'Empresa Consultoria & Auditoria Lda',
+                'nuit' => '401234567',
+                'endereco' => 'Rua Samora Machel, 1500, Maputo',
+                'telefone' => '845678901',
+                'email' => 'estagiarios@eca.co.mz',
+                'ponto_focal_nome' => 'Sofia Nkomo',
+                'ponto_focal_contacto' => '845444444',
+                'status' => 'ativa',
+                'validade_parceria' => now()->addYears(3),
+            ],
+            [
+                'nome' => 'Câmara Municipal de Maputo',
+                'nuit' => '401345678',
+                'endereco' => 'Av. 24 de Julho, Maputo',
+                'telefone' => '216666666',
+                'email' => 'cmaputo@gmail.com',
+                'ponto_focal_nome' => 'Manuel Mulhovo',
+                'ponto_focal_contacto' => '846555555',
+                'status' => 'suspensa',
+                'validade_parceria' => now()->subMonths(2),
+            ],
+        ];
+
+        foreach ($instituicoes as $instituicao) {
+            Instituicao::firstOrCreate(['nuit' => $instituicao['nuit']], $instituicao);
+        }
     }
 }

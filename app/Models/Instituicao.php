@@ -2,28 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Instituicao extends Model
 {
     use HasFactory;
-  // Força o nome correto da tabela
+
     protected $table = 'instituicoes';
+
     protected $fillable = [
-        'nome', 'nuit', 'endereco', 'telefone', 'email',
-        'ponto_focal_nome', 'ponto_focal_contacto'
+        'nome',
+        'nuit',
+        'endereco',
+        'telefone',
+        'email',
+
+        'ponto_focal_nome',
+        'ponto_focal_contacto',
+
+        'status',
+        'validade_parceria'
     ];
 
-    public function users() {
-        return $this->hasMany(User::class);
-    }
+    protected $casts = [
+        'validade_parceria' => 'date'
+    ];
 
-    public function estagios() {
-        return $this->hasMany(Estagio::class);
-    }
-    public function cursos()
+    public function estagios()
     {
-        return $this->belongsToMany(Curso::class);
+        return $this->hasMany(Estagio::class);
     }
 }

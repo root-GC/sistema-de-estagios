@@ -2,32 +2,44 @@
 
 namespace Database\Seeders;
 
+use App\Models\Curso;
+use App\Models\Departamento;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class CursoSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('cursos')->insert([
-            [
-                'nome' => 'Licenciatura em Informática',
-                'descricao' => 'Curso focado em desenvolvimento de software e sistemas de informação.',
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'nome' => 'Engenharia de Redes',
-                'descricao' => 'Curso focado em redes de computadores e infraestrutura.',
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'nome' => 'Sistemas de Informação',
-                'descricao' => 'Curso focado em gestão e desenvolvimento de sistemas empresariais.',
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
-        ]);
+        $departamentos = Departamento::all();
+
+        if ($departamentos->isEmpty()) {
+            $this->call(DepartamentoSeeder::class);
+            $departamentos = Departamento::all();
+        }
+
+        $cursos = [
+            ['nome' => 'Licenciatura em Engenharia Informática', 'departamento' => 'Engenharia Informática', 'duracao_anos' => 4],
+            ['nome' => 'Mestrado em Engenharia Informática', 'departamento' => 'Engenharia Informática', 'duracao_anos' => 2],
+            ['nome' => 'Licenciatura em Gestão', 'departamento' => 'Gestão', 'duracao_anos' => 3],
+            ['nome' => 'Mestrado em Gestão Empresarial', 'departamento' => 'Gestão', 'duracao_anos' => 2],
+            ['nome' => 'Licenciatura em Engenharia Civil', 'departamento' => 'Engenharia Civil', 'duracao_anos' => 4],
+            ['nome' => 'Licenciatura em Biologia', 'departamento' => 'Ciências Naturais', 'duracao_anos' => 3],
+            ['nome' => 'Licenciatura em Sociologia', 'departamento' => 'Humanas', 'duracao_anos' => 3],
+        ];
+
+        foreach ($cursos as $curso) {
+            $departamento = $departamentos->firstWhere('nome', $curso['departamento']);
+            
+            if ($departamento) {
+                Curso::firstOrCreate(
+                    ['nome' => $curso['nome']],
+                    [
+                        'departamento_id' => $departamento->id,
+                        'duracao_anos' => $curso['duracao_anos'],
+                        'descricao' => "Curso de {$curso['nome']}",
+                    ]
+                );
+            }
+        }
     }
 }
