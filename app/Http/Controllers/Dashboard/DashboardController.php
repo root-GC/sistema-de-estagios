@@ -35,6 +35,8 @@ class DashboardController extends Controller
         ]);
     }
 
+    
+
     /**
      * Dashboard do coordenador
      */
