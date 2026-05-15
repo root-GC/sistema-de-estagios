@@ -40,7 +40,7 @@ class InstituicaoController extends Controller
             'email' => 'nullable|email',
             'ponto_focal_nome' => 'nullable|string',
             'ponto_focal_contacto' => 'nullable|string',
-            'status' => 'required|in:ativa,suspensa,inativa',
+            'status' => 'nullable|in:ativa,suspensa,inativa',
             'validade_parceria' => 'nullable|date'
         ]);
 
@@ -51,11 +51,11 @@ class InstituicaoController extends Controller
     /**
      * Atualizar instituição
      */
-    public function update(Request $request, Instituicao $instituicao)
+    public function update(Request $request, Instituicao $instituico)
     {
         $validated = $request->validate([
-            'nome' => 'string|unique:instituicoes,nome,'.$instituicao->id,
-            'nuit' => 'string|unique:instituicoes,nuit,'.$instituicao->id,
+            'nome' => 'string|unique:instituicoes,nome,'.$instituico->id,
+            'nuit' => 'string|unique:instituicoes,nuit,'.$instituico->id,
             'endereco' => 'nullable|string',
             'telefone' => 'nullable|string',
             'email' => 'nullable|email',
@@ -65,16 +65,16 @@ class InstituicaoController extends Controller
             'validade_parceria' => 'nullable|date'
         ]);
 
-        $instituicao->update($validated);
-        return response()->json($instituicao);
+        $instituico->update($validated);
+        return response()->json($instituico);
     }
 
     /**
      * Eliminar instituição
      */
-    public function destroy(Instituicao $instituicao)
+    public function destroy(Instituicao $instituico)
     {
-        $instituicao->delete();
+        $instituico->delete();
         return response()->json(['message' => 'Institution deleted']);
     }
 
