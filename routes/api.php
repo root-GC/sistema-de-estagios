@@ -108,6 +108,14 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::post('instituicoes', [InstituicaoController::class, 'store']);
     });
 
+    Route::middleware('role:coordenador')->prefix('coordenador')->group(function (){
+        // Route::apiResource('tutores', TutoresController::class);
+        Route::apiResource('estagios', EstagioController::class);
+        Route::apiResource('tutores', TutoresController::class);
+        Route::apiResource('users', AdminUserController::class);
+
+    });
+
     // Apenas admin e coordenador podem criar/editar
     Route::middleware('role:admin|coordenador')->prefix('academic')->group(function () {
         Route::post('departamentos', [DepartamentoController::class, 'store']);
